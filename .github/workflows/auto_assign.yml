@@ -1,0 +1,14 @@
+name: AutoAssignment
+
+on:
+  pull_request_target:
+    types: [opened, reopened, ready_for_review]
+
+jobs:
+  assignment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assignment
+        uses: kentaro-m/auto-assign-action@v1.2.1
+        with:
+          configuration-path: ".github/auto_assign_reviewer.yml"
