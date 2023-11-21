@@ -12,20 +12,18 @@
 
 현재 기간계 프로젝트에서도 임시 변수가 많이 쓰이고 있는데, 대표적인 예시가 post, patch 등의 요청 시 body에 담을 객체를 생성하는 함수이다.
 
-```javascript
+```typescript
 const preProcessData = (data: any) => {
   const ret: any[] = [];
 
   data.forEach((el: any) => {
     ret.push({
-      title: el.coverageSpecialContractCategoryName,
-      id: el.coverageSpecialContractCategoryId,
-      hideYn: el.hideYn,
-      options: el.coverageSpecialContractList.map((item: any) => {
+      title: el.title,
+      id: el.id,
+      options: el.options.map((option: any) => {
         return {
-          name: item.coverageSpecialContractName,
-          id: item.coverageSpecialContractId,
-          hideYn: item.hideYn,
+          name: option.name,
+          id: option.id,
         };
       }),
     });
