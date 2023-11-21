@@ -1,5 +1,3 @@
 ## Date
 
 ## Topic
-
-## Link
