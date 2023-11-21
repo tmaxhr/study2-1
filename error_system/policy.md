@@ -18,6 +18,8 @@
 
 [react error boundary](https://github.com/bvaughn/react-error-boundary)
 
+https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
+
 [QueryCache in react query](https://tanstack.com/query/v4/docs/react/reference/QueryCache)
 
 https://fe-developers.kakaoent.com/2022/221110-error-boundary/
