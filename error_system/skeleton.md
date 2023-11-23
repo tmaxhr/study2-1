@@ -65,3 +65,9 @@ if (!isLoading) {
 ## Todo
 
 슬랙에서 에러 연동하기
+
+## 참고
+
+https://kyuhyuk.kr/article/react/2022/05/24/Use-react-error-boundary-to-handle-errors-in-React
+
+https://tanstack.com/query/v4/docs/react/guides/network-mode#network-mode-always
