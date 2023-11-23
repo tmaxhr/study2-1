@@ -14,3 +14,16 @@
 [에러 처리 정책 정하기](https://github.com/tmaxhr/study2-1/blob/main/error_system/policy.md)
 
 </details>
+
+<details>
+<summary>2023.11.13</summary>
+
+## javascript
+
+[파라미터 기본값 설정하기](https://github.com/tmaxhr/study2-1/blob/main/javascript/default_values.md)
+
+## error system
+
+[에러 처리 시나리오 개요 설계](https://github.com/tmaxhr/study2-1/blob/main/error_system/skeleton.md)
+
+</details>
