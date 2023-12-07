@@ -29,6 +29,19 @@
 </details>
 
 <details>
+<summary>2023.11.29</summary>
+
+## javascript
+
+[유틸 함수들 점검](https://github.com/tmaxhr/study2-1/blob/main/javascript/utils.md)
+
+## error system
+
+[슬랙 연동과 커스텀 에러](https://github.com/tmaxhr/study2-1/blob/main/error_system/custom_errors.md)
+
+</details>
+
+<details>
 <summary>2023.12.04</summary>
 
 ## error system
