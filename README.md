@@ -16,7 +16,7 @@
 </details>
 
 <details>
-<summary>2023.11.13</summary>
+<summary>2023.11.22</summary>
 
 ## javascript
 
@@ -25,5 +25,14 @@
 ## error system
 
 [에러 처리 시나리오 개요 설계](https://github.com/tmaxhr/study2-1/blob/main/error_system/skeleton.md)
+
+</details>
+
+<details>
+<summary>2023.12.04</summary>
+
+## error system
+
+[에러 시스템 구축](https://github.com/tmaxhr/study2-1/blob/main/error_system/prototype.md)
 
 </details>
