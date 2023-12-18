@@ -27,8 +27,8 @@ const getList = async () => {
   try {
     const response = await axios.get("path");
   } catch (error) {
-    console.error(error); ?
-    window.alert(error); ?
+    console.error(error);
+    window.alert(error);
   }
 };
 ```
@@ -84,32 +84,12 @@ const getList = async () => {
 
 // component.js
 const data = await getList();
-```
-
----
-
-# 어떻게 처리할까
-
----
-
-<!-- header: "어떻게 처리할까" -->
-
-### Error boundary
-
-- 페이지에서 런타임에 발생할 수 있는 에러들
-
-- 페이지 데이터와 관련된 에러
-
-```
-const data = await get();
-
 ...
-<view>
-  {data.map}
-</view>
-```
 
-- 개발자가 막 던진 에러들
+data.map(element => {
+  /** some logic */
+})
+```
 
 ---
 
@@ -120,6 +100,28 @@ const data = await get();
 - 나도 모르게 런타임에 발생한 에러
 
 - 막 던져도 받을 수 있는 환경
+
+---
+
+# 어떻게 처리할까
+
+---
+
+<!-- header: "어떻게 처리할까" -->
+
+![bg 70%](./images/error-boundary-react.png)
+
+---
+
+<!-- header: "어떻게 처리할까" -->
+
+## Error boundary
+
+- 페이지에서 런타임에 발생할 수 있는 에러들
+
+- 페이지 데이터와 관련된 에러
+
+- 개발자가 막 던진 에러들
 
 ---
 
@@ -140,19 +142,109 @@ const data = await get();
 
 - 기본적으로는 에러가 Root로 전파되지 않음 (데이터 보존)
 
-- 로깅을 선택할 수 있도록 props로
+---
+
+<!-- header: "에러의 기준점 정하기 / PageBoundary" -->
+
+```tsx
+function PageErrorBoundary({
+  children,
+  ...props
+}: PropsWithChildren<PageErrorBoundaryProps>) {
+  const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        console.error("network error");
+        return <>network error</>;
+      }
+
+      if (error.response?.status === 500) {
+        return <Page500 errorMessage={errorMessage} />;
+      }
+
+      if (knownErrorCodes.includes(status)) {
+        return knownErrors[status];
+      }
+    }
+
+    if (error instanceof CustomError) {
+      if (error.type === "ALERT") {
+        alert(error.message);
+        resetErrorBoundary();
+        return null;
+      }
+
+      if (error.type === "CRITICAL") {
+        return <Page500 errorMessage={error.message} />;
+      }
+    }
+
+    throw new Error(error.message);
+  };
+
+  return <ErrorBoundary fallbackRender={fallback}>{children}</ErrorBoundary>;
+}
+```
 
 ---
 
 <!-- header: "에러의 기준점 정하기 / RootBoundary" -->
 
-RootBoundary 코드 넣기
+```tsx
+function RootErrorBoundary({
+  children,
+  ...props
+}: PropsWithChildren<PageErrorBoundaryProps>) {
+  const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+    return <Page500 />;
+  };
+
+  return (
+    <ErrorBoundary fallbackRender={fallback}>
+      <PageErrorBoundary>{children}</PageErrorBoundary>
+    </ErrorBoundary>
+  );
+}
+```
 
 ---
 
-<!-- header: "에러의 기준점 정하기 / PageBoundary" -->
+<!-- header: "에러의 기준점 정하기" -->
 
-PageBoundary 코드 넣기
+## ErrorBoundary의 문제점
+
+- 비동기
+
+- 이벤트
+
+---
+
+<!-- header: "에러의 기준점 정하기 / ErrorBoundary의 문제점" -->
+
+```tsx
+useEffect(() => {
+  const errorFunction = (event: ErrorEvent) => {
+    if (event.error instanceof AxiosError) return;
+    if (event.error instanceof CustomError) {
+      showBoundary(event.error);
+      return;
+    }
+
+    showBoundary(
+      new CustomError({
+        type: "CRITICAL",
+        message: "Uncaught Error",
+        cause: event.error.cause,
+      })
+    );
+  };
+
+  window.addEventListener("error", errorFunction);
+  return () => {
+    window.removeEventListener("error", errorFunction);
+  };
+}, [showBoundary]);
+```
 
 ---
 
@@ -160,22 +252,73 @@ PageBoundary 코드 넣기
 
 # 추가 : 슬랙에 로깅하기
 
-- sentry와 같은 로깅 툴을 쓰면 좋지만, 너무 오버스펙
-
-- 간단히 에러만 알려주는 용도로 슬랙을 활용
-
-- 별도의 프록시 서버 (로컬에서는 안돌리고, 스테이징이나 qa 용도)
-
-- 메세지 찍은거 캡쳐
+![bg 80%](./images/slack-log.png)
 
 ---
 
-# 제안사항
+<!-- header: "추가 : 슬랙에 로깅하기" -->
+
+## Proxy server?
+
+- http <-> https
+
+- 보안
+
+---
+
+<!-- header: "추가 : 슬랙에 로깅하기" -->
+
+- 로깅 여부를 PageBoundary에서도 선택
+
+```tsx
+function PageErrorBoundary({
+  children,
+  log = false,
+  ...props
+}: PropsWithChildren<PageErrorBoundaryProps>) {
+  const fallback = () => {
+    ...
+
+    if (log) {
+      /**
+       * send log
+       * route to Page500
+       */
+    }
+  }
+
+}
+```
+
+---
+
+<!-- header: "추가 : 슬랙에 로깅하기" -->
+
+## 도메인 별로 에러 코드 분리
 
 도메인별로 코드 분리하기
 
 - 상팩 600
 - 계약 700
 - 고객 800
+- 등등...
 
-이건 어디다 넣을까요..
+---
+
+<!-- header: '추가 : 슬랙에 로깅하기' -->
+
+## 장점
+
+- 단순한 에러 메세지보다 발전된 로그
+
+- 에러 대응
+
+---
+
+<!-- header: '' -->
+
+- 페이지가 안보여요 ㅜㅜ
+
+- 버튼을 클릭했는데 아무것도 안돼요
+
+- 이런 에러가 났는데 담당자 분이 누구죠?
