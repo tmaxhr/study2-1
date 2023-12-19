@@ -10,8 +10,6 @@ footer: "에러 시스템 도입기"
 
 FT2-1 김상호, 김해람, 오현석
 
-<!-- paginate: true -->
-
 ---
 
 # 에러, 어떻게 처리하고 계신가요?
@@ -70,6 +68,8 @@ const getList = async () => {
 };
 ```
 
+![](./images/fetch-error.png)
+
 ---
 
 <!-- header: "어떤 경우에 발생할까?" -->
@@ -77,19 +77,15 @@ const getList = async () => {
 ## 잘못된 data에 접근할 경우
 
 ```javascript
-// api.js
-const getList = async () => {
-  const response = await axios.get("path");
-};
-
 // component.js
 const data = await getList();
 ...
-
 data.map(element => {
   /** some logic */
 })
 ```
+
+![](./images/fetch-error.png)
 
 ---
 
@@ -97,7 +93,7 @@ data.map(element => {
 
 # 에러의 기준점 정하기
 
-- 나도 모르게 런타임에 발생한 에러
+- 런타임에 발생한 에러 핸들링
 
 - 막 던져도 받을 수 있는 환경
 
@@ -127,56 +123,48 @@ data.map(element => {
 
 <!-- header: "에러의 기준점 정하기" -->
 
-## RootBoundary
-
-- 전역에서 처리
-
-- 주로 런타임상에서 예측하지 못하게 발생한 에러들이나,
-
-<br />
-<br />
-
 ## PageBoundary
 
-- 페이지 별로 에러가 발생했을 때 동작이 특정되는 경우
+- 페이지 별
 
 - 기본적으로는 에러가 Root로 전파되지 않음 (데이터 보존)
+
+<br />
+<br />
+
+## RootBoundary
+
+- 앱 전역
+
+- 별도로 처리하지 않은 에러
+
+- 예측하지 못한 런타임 에러들
 
 ---
 
 <!-- header: "에러의 기준점 정하기 / PageBoundary" -->
 
 ```tsx
-function PageErrorBoundary({
-  children,
-  ...props
-}: PropsWithChildren<PageErrorBoundaryProps>) {
+function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     if (error instanceof AxiosError) {
-      if (!error.response) {
-        console.error("network error");
-        return <>network error</>;
-      }
-
-      if (error.response?.status === 500) {
+      if (error.status === 500) {
         return <Page500 errorMessage={errorMessage} />;
       }
 
-      if (knownErrorCodes.includes(status)) {
+      if (knownErrorCodes.includes(error.status)) {
         return knownErrors[status];
       }
     }
 
     if (error instanceof CustomError) {
-      if (error.type === "ALERT") {
-        alert(error.message);
-        resetErrorBoundary();
-        return null;
-      }
-
       if (error.type === "CRITICAL") {
         return <Page500 errorMessage={error.message} />;
       }
+
+      alert(error.message);
+      resetErrorBoundary();
+      return null;
     }
 
     throw new Error(error.message);
@@ -191,10 +179,7 @@ function PageErrorBoundary({
 <!-- header: "에러의 기준점 정하기 / RootBoundary" -->
 
 ```tsx
-function RootErrorBoundary({
-  children,
-  ...props
-}: PropsWithChildren<PageErrorBoundaryProps>) {
+function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     return <Page500 />;
   };
@@ -271,19 +256,12 @@ useEffect(() => {
 - 로깅 여부를 PageBoundary에서도 선택
 
 ```tsx
-function PageErrorBoundary({
-  children,
-  log = false,
-  ...props
-}: PropsWithChildren<PageErrorBoundaryProps>) {
+function PageErrorBoundary({ children, log = false ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = () => {
     ...
 
     if (log) {
-      /**
-       * send log
-       * route to Page500
-       */
+      /** send log to slack */
     }
   }
 
@@ -302,6 +280,34 @@ function PageErrorBoundary({
 - 계약 700
 - 고객 800
 - 등등...
+
+---
+
+<!-- header: "추가 : 슬랙에 로깅하기" -->
+
+```tsx
+function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
+  const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+    if (error instanceof AxiosError) {
+      if (error.status === 500) {
+        return <Page500 errorMessage={errorMessage} />;
+      }
+
+      if (knownErrorCodes.includes(error.status)) {
+        return knownErrors[status];
+      }
+
+      if (domainErrorCodes.includes(error.status)) {
+        /** some logic */
+      }
+    }
+
+    ...
+  };
+
+  return <ErrorBoundary fallbackRender={fallback}>{children}</ErrorBoundary>;
+}
+```
 
 ---
 
