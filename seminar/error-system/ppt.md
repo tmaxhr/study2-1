@@ -91,7 +91,7 @@ data.map(element => {
 
 <!-- header: "" -->
 
-# 에러의 기준점 정하기
+# 목표
 
 - 런타임에 발생한 에러 핸들링
 
@@ -121,7 +121,7 @@ data.map(element => {
 
 ---
 
-<!-- header: "에러의 기준점 정하기" -->
+<!-- header: "어떻게 처리할까" -->
 
 ## PageBoundary
 
@@ -142,7 +142,7 @@ data.map(element => {
 
 ---
 
-<!-- header: "에러의 기준점 정하기 / PageBoundary" -->
+<!-- header: "PageBoundary" -->
 
 ```tsx
 function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
@@ -176,7 +176,7 @@ function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 
 ---
 
-<!-- header: "에러의 기준점 정하기 / RootBoundary" -->
+<!-- header: "RootBoundary" -->
 
 ```tsx
 function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
@@ -194,9 +194,9 @@ function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 
 ---
 
-<!-- header: "에러의 기준점 정하기" -->
+<!-- header: "" -->
 
-## ErrorBoundary의 문제점
+# ErrorBoundary의 문제점
 
 - 비동기
 
@@ -204,7 +204,7 @@ function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 
 ---
 
-<!-- header: "에러의 기준점 정하기 / ErrorBoundary의 문제점" -->
+<!-- header: "ErrorBoundary의 문제점" -->
 
 ```tsx
 useEffect(() => {
@@ -256,7 +256,7 @@ useEffect(() => {
 - 로깅 여부를 PageBoundary에서도 선택
 
 ```tsx
-function PageErrorBoundary({ children, log = false ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
+function PageErrorBoundary({ children, log = false }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = () => {
     ...
 
