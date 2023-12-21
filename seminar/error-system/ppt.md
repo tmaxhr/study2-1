@@ -85,7 +85,7 @@ data.map(element => {
 })
 ```
 
-![](./images/fetch-error.png)
+![](./images/data-error.png)
 
 ---
 
