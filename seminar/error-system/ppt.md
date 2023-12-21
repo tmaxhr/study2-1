@@ -144,6 +144,13 @@ data.map(element => {
 
 <!-- header: "PageBoundary" -->
 
+<!-- Scoped Style -->
+<style scoped>
+  code {
+    font-size: 60%;
+  }
+</style>
+
 ```tsx
 function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
