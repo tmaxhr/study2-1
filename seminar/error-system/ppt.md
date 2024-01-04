@@ -263,7 +263,7 @@ useEffect(() => {
 
 <!-- header: "추가 : 슬랙에 로깅하기" -->
 
-### RootBoundary
+RootBoundary
 
 ```tsx
 function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
@@ -285,10 +285,14 @@ function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 
 <!-- header: "추가 : 슬랙에 로깅하기" -->
 
-- 로깅 여부를 PageBoundary에서도 선택
+로깅 여부를 PageBoundary에서도 선택
 
 ```tsx
-function PageErrorBoundary({ children, log = false }: PropsWithChildren<PageErrorBoundaryProps>) {
+function PageErrorBoundary({
+  children,
+  log = false,
+  ...props
+}: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = () => {
     ...
 
