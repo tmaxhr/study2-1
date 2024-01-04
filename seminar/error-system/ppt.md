@@ -87,7 +87,7 @@ data.map(element => {
 
 ![](./images/data-error.png)
 
-![Alt text](image.png)
+![Alt text](./images/image.png)
 
 ---
 
@@ -169,7 +169,7 @@ function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 
     if (error instanceof CustomError) {
       if (error.type === "CRITICAL") {
-        return <Page500 errorMessage={error.message} />;
+        return <ErrorPage errorMessage={error.message} />;
       }
 
       alert(error.message);
@@ -191,7 +191,7 @@ function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 ```tsx
 function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
   const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-    return <Page500 />;
+    return <ErrorPage />;
   };
 
   return (
@@ -270,7 +270,7 @@ function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
   const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     /** send log to slack */
 
-    return <Page500 />;
+    return <ErrorPage />;
   };
 
   return (
