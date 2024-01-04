@@ -8,7 +8,7 @@ footer: "에러 시스템 도입기"
 
 # 에러 시스템 도입기
 
-FT2-1 김상호, 김해람, 오현석
+FT2 김상호, 김해람, 오현석
 
 ---
 
@@ -87,6 +87,8 @@ data.map(element => {
 
 ![](./images/data-error.png)
 
+![Alt text](image.png)
+
 ---
 
 <!-- header: "" -->
@@ -113,7 +115,7 @@ data.map(element => {
 
 ## Error boundary
 
-- 페이지에서 런타임에 발생할 수 있는 에러들
+- 런타임에 발생하는 에러들
 
 - 페이지 데이터와 관련된 에러
 
@@ -127,9 +129,10 @@ data.map(element => {
 
 - 페이지 별
 
-- 기본적으로는 에러가 Root로 전파되지 않음 (데이터 보존)
+- 에러가 Root로 전파되지 않음
 
-<br />
+- 데이터 보존
+
 <br />
 
 ## RootBoundary
@@ -260,6 +263,28 @@ useEffect(() => {
 
 <!-- header: "추가 : 슬랙에 로깅하기" -->
 
+### RootBoundary
+
+```tsx
+function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBoundaryProps>) {
+  const fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+    /** send log to slack */
+
+    return <Page500 />;
+  };
+
+  return (
+    <ErrorBoundary fallbackRender={fallback}>
+      <PageErrorBoundary>{children}</PageErrorBoundary>
+    </ErrorBoundary>
+  );
+}
+```
+
+---
+
+<!-- header: "추가 : 슬랙에 로깅하기" -->
+
 - 로깅 여부를 PageBoundary에서도 선택
 
 ```tsx
@@ -283,7 +308,7 @@ function PageErrorBoundary({ children, log = false }: PropsWithChildren<PageErro
 
 도메인별로 코드 분리하기
 
-- 상팩 600
+- 상품 600
 - 계약 700
 - 고객 800
 - 등등...
