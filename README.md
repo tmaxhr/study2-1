@@ -49,3 +49,25 @@
 [에러 시스템 구축](https://github.com/tmaxhr/study2-1/blob/main/error_system/prototype.md)
 
 </details>
+
+<details>
+<summary>2023.12.11</summary>
+
+## error system
+
+[Error boundary 수정사항](https://github.com/tmaxhr/study2-1/blob/main/error_system/error_boundary_questions.md)
+
+[세미나 발표 내용 정리](https://github.com/tmaxhr/study2-1/blob/main/error_system/seminar_agenda.md)
+
+</details>
+
+<details>
+<summary>2023.12.13</summary>
+
+## error system
+
+[세미나 발표 ppt](https://github.com/tmaxhr/study2-1/blob/main/seminar/error-system/ppt.md)
+
+[세미나 발표 스크립트](https://github.com/tmaxhr/study2-1/blob/main/seminar/error-system/script.md)
+
+</details>
