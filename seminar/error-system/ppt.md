@@ -91,6 +91,20 @@ data.map(element => {
 
 ---
 
+## 개발자가 던진 에러
+
+```javascript
+const getList = async () => {
+  try {
+    const response = await axios.get("path");
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+```
+
+---
+
 <!-- header: "" -->
 
 # 목표
@@ -163,7 +177,7 @@ function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
       }
 
       if (knownErrorCodes.includes(error.status)) {
-        return knownErrors[status];
+        /** some logic */
       }
     }
 
@@ -330,7 +344,7 @@ function PageErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
       }
 
       if (knownErrorCodes.includes(error.status)) {
-        return knownErrors[status];
+        /** some logic */
       }
 
       if (domainErrorCodes.includes(error.status)) {
