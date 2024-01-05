@@ -234,10 +234,7 @@ function RootErrorBoundary({ children, ...props }: PropsWithChildren<PageErrorBo
 useEffect(() => {
   const errorFunction = (event: ErrorEvent) => {
     if (event.error instanceof AxiosError) return;
-    if (event.error instanceof CustomError) {
-      showBoundary(event.error);
-      return;
-    }
+    if (event.error instanceof CustomError) return;
 
     showBoundary(
       new CustomError({
